@@ -1,0 +1,59 @@
+name: Publicar landing en GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Compilar landing
+        env:
+          SITE_URL: https://jlpineda12.github.io
+          BASE_PATH: /landing-matriculas-2027-liceo-lunita/
+          # Prototipo: noindex (la pauta funciona igual). Cambie a "false" en Settings → Variables para indexar.
+          PUBLIC_NOINDEX: ${{ vars.PUBLIC_NOINDEX || 'true' }}
+          # Píxeles: vacíos = desactivados. Configúrelos en Settings → Secrets and variables → Actions → Variables.
+          PUBLIC_META_PIXEL_ID: ${{ vars.PUBLIC_META_PIXEL_ID }}
+          PUBLIC_GTAG_ID: ${{ vars.PUBLIC_GTAG_ID }}
+          PUBLIC_GADS_CONVERSION: ${{ vars.PUBLIC_GADS_CONVERSION }}
+        run: npm run build
+
+      - name: Subir artefacto de Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Publicar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

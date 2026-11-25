@@ -1,0 +1,44 @@
+---
+/**
+ * Píxel de Meta y etiqueta de Google (GA4 / Google Ads), DESACTIVADOS hasta que existan los IDs:
+ *   PUBLIC_META_PIXEL_ID · PUBLIC_GTAG_ID · PUBLIC_GADS_CONVERSION (ver .env.example)
+ * Se cargan después de la primera interacción o a los 3,5 s para no afectar la velocidad de carga.
+ * Los eventos (Lead / Contact / generate_lead) los envía src/scripts/landing.ts con window.lunitaTrack().
+ */
+const meta = (import.meta.env.PUBLIC_META_PIXEL_ID ?? '').trim();
+const gtag = (import.meta.env.PUBLIC_GTAG_ID ?? '').trim();
+const conversion = (import.meta.env.PUBLIC_GADS_CONVERSION ?? '').trim();
+const enabled = Boolean(meta || gtag);
+const cfg = JSON.stringify({ meta, gtag, conversion });
+---
+
+{enabled && (
+  <script is:inline define:vars={{ cfg }}>
+    (function () {
+      var c = JSON.parse(cfg), loaded = false;
+      function load() {
+        if (loaded) return; loaded = true;
+        if (c.meta) {
+          !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', c.meta); fbq('track', 'PageView');
+        }
+        if (c.gtag) {
+          var s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + c.gtag; document.head.appendChild(s);
+          window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); };
+          gtag('js', new Date()); gtag('config', c.gtag);
+          var aw = c.conversion.split('/')[0]; if (aw && aw !== c.gtag) gtag('config', aw);
+        }
+      }
+      ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(function (e) { addEventListener(e, load, { once: true, passive: true }); });
+      setTimeout(load, 3500);
+      window.lunitaTrack = function (kind, data) {
+        load();
+        if (window.fbq) fbq('track', kind === 'form' ? 'Lead' : 'Contact', data || {});
+        if (window.gtag) {
+          gtag('event', kind === 'form' ? 'generate_lead' : 'contact', Object.assign({ method: kind }, data || {}));
+          if (c.conversion) gtag('event', 'conversion', { send_to: c.conversion });
+        }
+      };
+    })();
+  </script>
+)}

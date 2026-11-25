@@ -1,0 +1,484 @@
+---
+/**
+ * Landing de pauta — Matrículas 2027, Liceo Lunita de Chía.
+ * Una sola página enfocada en conversión: WhatsApp (mensaje prellenado), llamada y matrícula en SIGA.
+ * Lunita es la protagonista: entra en el hero, guía el recorrido cambiando de pose por sección y celebra al final.
+ */
+import { Image } from 'astro:assets';
+import Base from '@/layouts/Base.astro';
+import Lunita from '@/components/Lunita.astro';
+import Icon from '@/components/Icon.astro';
+import Sticker from '@/components/Sticker.astro';
+import { SITE, ENROLLMENT, COSTS, cop, STATS, STHEAMI, LEVELS, GRADES, TRIPS, ADMISSION_STEPS, ADMISSION_DOCS, FAQ, waLink } from '@/data/site';
+
+import preescolar from '@/assets/preescolar.jpg';
+import primaria from '@/assets/primaria.jpg';
+import bachillerato from '@/assets/bachillerato.jpg';
+import festival from '@/assets/festival-bandas.webp';
+import convenio from '@/assets/convenio-florida.jpeg';
+import premio from '@/assets/premio-excelencia.webp';
+
+const base = import.meta.env.BASE_URL;
+const photos = { preescolar, primaria, bachillerato };
+const wa = waLink();
+const waCosts = waLink('Hola, quiero conocer los valores de matrícula y pensión 2027 en el Liceo Lunita de Chía.');
+const waVisit = waLink('Hola, quiero agendar una visita al Liceo Lunita de Chía para Matrículas 2027.');
+
+const WORDS = [
+  { t: 'luz propia', c: '#ffc800', d: '#e5a400', fg: '#0f1747' },
+  { t: 'ciencia', c: '#1cb0f6', d: '#1899d6', fg: '#0f1747' },
+  { t: 'arte', c: '#ff86d0', d: '#e266b3', fg: '#0f1747' },
+  { t: 'música', c: '#ce82ff', d: '#a568cc', fg: '#0f1747' },
+  { t: 'valores', c: '#58cc02', d: '#46a302', fg: '#0f1747' },
+];
+const STAIRS = [
+  { t: 'Jardín', c: 'orange' }, { t: 'Transición', c: 'yellow' }, { t: '1.° a 5.°', c: 'green' }, { t: '6.° a 11.°', c: 'sky' },
+];
+
+// Recorrido de los viajes (horizontal en escritorio, en zigzag en celular)
+const COLORS: Record<string, [string, string]> = {
+  yellow: ['#ffc800', '#e5a400'], red: ['#ff4b4b', '#ea2b2b'], blue: ['#303296', '#22246f'], purple: ['#a568cc', '#7b35b8'], orange: ['#ff9600', '#e08600'], green: ['#58cc02', '#46a302'],
+};
+const STOPS = [{ name: 'Chía', color: 'yellow' }, ...TRIPS];
+const H_PTS: [number, number][] = [[90, 300], [300, 130], [510, 300], [720, 130], [930, 300], [1120, 130]];
+const V_PTS: [number, number][] = [[90, 70], [270, 190], [90, 310], [270, 430], [90, 550], [270, 670]];
+const curve = (pts: [number, number][], vertical = false) =>
+  pts.reduce((d, [x, y], i) => {
+    if (!i) return `M${x} ${y}`;
+    const [px, py] = pts[i - 1];
+    return vertical
+      ? `${d} C${px} ${py + (y - py) * 0.6} ${x} ${y - (y - py) * 0.6} ${x} ${y}`
+      : `${d} C${px + (x - px) * 0.5} ${py} ${x - (x - px) * 0.5} ${y} ${x} ${y}`;
+  }, '');
+const H_PATH = curve(H_PTS);
+const V_PATH = curve(V_PTS, true);
+---
+
+<Base
+  title="Matrículas 2027 abiertas · Liceo Lunita de Chía — De Jardín a Bachillerato"
+  description="Matrículas 2027 del 1 al 17 de diciembre de 2026. Colegio en Chía de Jardín a Bachillerato con modelo STHEAMI, banda marcial, convenio de bachillerato internacional y viajes por el mundo. Escríbenos por WhatsApp."
+>
+  <header class="top" data-top>
+    <a class="brand" href="#inicio" aria-label="Liceo Lunita de Chía, inicio">
+      <img src={`${base}escudo.svg`} width="30" height="35" alt="" />
+      <span>Liceo Lunita <small>de Chía</small></span>
+    </a>
+    <nav class="top-nav" aria-label="Secciones">
+      <a href="#niveles">Niveles</a><a href="#por-que">Por qué Lunita</a><a href="#viajes">Viajes</a><a href="#costos">Costos</a><a href="#requisitos">Requisitos</a>
+    </nav>
+    <a class="btn green sm" href={wa} target="_blank" rel="noopener" data-track="whatsapp" data-where="header" aria-label="Escríbenos por WhatsApp"><Icon name="whatsapp" /> <span class="hide-xs">WhatsApp</span></a>
+  </header>
+
+  <main id="contenido">
+    <!-- ================================================================ HERO -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title" data-hero data-guide="hola|¡Hola! Soy Lunita. Te muestro el colegio">
+      <div class="shapes" aria-hidden="true">
+        <span class="shape s-moon"><svg viewBox="0 0 200 200"><path d="M126 18A84 84 0 1 0 184 140A68 68 0 0 1 126 18Z" transform="translate(0 10)" fill="#e5a400" /><path d="M126 18A84 84 0 1 0 184 140A68 68 0 0 1 126 18Z" fill="#ffc800" /><circle cx="66" cy="70" r="10" fill="#fff" opacity=".35" /></svg></span>
+        <span class="shape s-planet"><svg viewBox="0 0 200 200"><circle cx="100" cy="110" r="62" fill="#1899d6" /><circle cx="100" cy="100" r="62" fill="#1cb0f6" /><circle cx="78" cy="80" r="12" fill="#fff" opacity=".35" /><ellipse cx="100" cy="104" rx="96" ry="26" fill="none" stroke="#1899d6" stroke-width="12" transform="rotate(-16 100 104)" /></svg></span>
+        <span class="shape s-rombo"><svg viewBox="0 0 200 200"><path d="M100 22 L188 110 L100 198 L12 110 Z" fill="#e08600" /><path d="M100 12 L188 100 L100 188 L12 100 Z" fill="#ff9600" /><path d="M100 58 L142 100 L100 142 L58 100 Z" fill="#fff" opacity=".9" /><path d="M100 84 L116 100 L100 116 L84 100 Z" fill="#ff9600" /></svg></span>
+        <span class="shape s-sun"><svg viewBox="0 0 200 200"><path d="M100 12 L117 36 L144 24 L148 53 L177 56 L166 84 L190 100 L166 116 L177 144 L148 147 L144 176 L117 164 L100 188 L83 164 L56 176 L52 147 L23 144 L34 116 L10 100 L34 84 L23 56 L52 53 L56 24 L83 36 Z" fill="#ce82ff" /><circle cx="100" cy="100" r="36" fill="#fff" opacity=".9" /></svg></span>
+      </div>
+
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="badge"><span class="pulse" aria-hidden="true"></span> Matrículas 2027 · {ENROLLMENT.dates}</p>
+          <h1 id="hero-title" class="hero-title">
+            <span class="sr-only">Matrículas 2027 en Chía, de Jardín a Bachillerato: donde cada estudiante brilla con luz propia</span>
+            <span aria-hidden="true">
+              <span class="t1">De <mark class="mk o">Jardín</mark> a <mark class="mk s">Bachillerato</mark>,</span>
+              <span class="t2">donde cada estudiante brilla con</span>
+              <span class="rot" data-rot>{WORDS.map((w, i) => <span class:list={['word', { on: i === 0 }]} style={`--wc:${w.c};--wd:${w.d};--wf:${w.fg}`}>{w.t}</span>)}</span>
+            </span>
+          </h1>
+          <p class="lead">
+            Colegio en Chía con más de <strong>{SITE.foundingYears} años</strong>: modelo <strong>STHEAMI</strong>, banda marcial, convenio de
+            <strong> bachillerato internacional</strong> y promociones que han <strong>viajado por el mundo</strong>.
+          </p>
+          <div class="ctas">
+            <a class="btn green" href={wa} target="_blank" rel="noopener" data-track="whatsapp" data-where="hero"><Icon name="whatsapp" /> Escríbenos por WhatsApp</a>
+            <a class="btn outline" href={`tel:${SITE.phone}`} data-track="call" data-where="hero"><Icon name="phone" /> Llamar</a>
+            <a class="btn blue" href={SITE.siga} target="_blank" rel="noopener" data-track="siga" data-where="hero">Ir a matrícula en SIGA <Icon name="arrow-up-right" /></a>
+          </div>
+          <ul class="trust">
+            <li><strong><span data-count="180">180</span>+</strong> bachilleres graduados</li>
+            <li><strong>12</strong> promociones</li>
+            <li><strong>Jardín → Once</strong> en un mismo colegio</li>
+          </ul>
+        </div>
+
+        <div class="hero-media">
+          <div class="luni-hero" aria-hidden="false">
+            <span class="glow" aria-hidden="true"></span>
+            <Lunita size={230} pose="hola" intro class="hero-luni" label="Lunita, la mascota del Liceo Lunita de Chía, saluda" />
+          </div>
+          <figure class="vcard" data-video>
+            <video
+              muted loop playsinline preload="none" width="1280" height="720"
+              poster={`${base}video/poster.webp`}
+              aria-label="Video animado: Lunita presenta las Matrículas 2027 del Liceo Lunita de Chía"
+              data-sources={JSON.stringify([{ src: `${base}video/lunita-matriculas-2027.webm`, type: 'video/webm' }, { src: `${base}video/lunita-matriculas-2027.mp4`, type: 'video/mp4' }])}
+            >
+              <track kind="captions" srclang="es" label="Español" src={`${base}video/lunita-matriculas-2027.vtt`} />
+            </video>
+            <button class="vbtn play" type="button" data-play aria-label="Reproducir video"><Icon name="play" /></button>
+            <div class="vbar">
+              <button type="button" class="vchip" data-toggle aria-label="Pausar video">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M8 5v14M16 5v14" /><path class="i-play" d="M8 5.5v13l11-6.5z" /></svg>
+              </button>
+              <button type="button" class="vchip sound" data-sound aria-pressed="false" aria-label="Activar sonido">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" /><path class="i-on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" /><path class="i-off" d="m16 9 6 6m0-6-6 6" /></svg>
+                <span data-sound-label>Activar sonido</span>
+              </button>
+            </div>
+            <figcaption class="sr-only">Video de 29 segundos con música original: Matrículas abiertas del 1 al 17 de diciembre de 2026. Contacto por WhatsApp 313 432 0295 o al (601) 884 9592.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ CIFRAS -->
+    <section class="stats" aria-label="Resultados del colegio">
+      <div class="wrap stats-row">
+        <div class="stat t-yellow"><b><span data-count={SITE.foundingYears}>{SITE.foundingYears}</span>+</b><span>Años en Chía</span></div>
+        {STATS.map((s, i) => (
+          <div class:list={['stat', ['t-sky', 't-green', 't-orange', 't-purple', 't-red'][i]]}><b><span data-count={s.value}>{s.value}</span>{s.suffix}</b><span>{s.label}</span></div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ================================================================ NIVELES -->
+    <section class="section" id="niveles" data-guide="estudio|¡De Jardín a Once crecemos contigo!">
+      <div class="wrap">
+        <div class="section-head center">
+          <p class="kicker"><span class="dot"></span>Todo en un mismo colegio</p>
+          <h2>De <span class="hl-y">Jardín</span> a <span class="hl-y">Bachillerato</span></h2>
+          <p>Tu hijo o hija empieza jugando en Jardín y termina como bachiller, con el mismo acompañamiento y el modelo STHEAMI en cada etapa.</p>
+        </div>
+
+        <ol class="stairs" aria-label="Etapas: Jardín, Transición, Primaria y Bachillerato" data-reveal>
+          {STAIRS.map((s, i) => <li class={`step t-${s.c}`} style={`--i:${i}`}><span>{s.t}</span></li>)}
+          <li class="step-flag" aria-hidden="true"><Sticker name="cap" size={64} tile={false} /></li>
+        </ol>
+
+        <div class="grid cols-3 levels">
+          {LEVELS.map((l) => (
+            <article class={`level card t-${l.theme}`}>
+              <div class="level-img">
+                <Image src={photos[l.photo]} alt={`Estudiantes de ${l.name} del Liceo Lunita de Chía`} widths={[340, 520, 720]} sizes="(min-width: 1024px) 350px, (min-width: 720px) 44vw, 84vw" loading="lazy" />
+              </div>
+              <span class="chip">{l.grades}</span>
+              <h3>{l.name}</h3>
+              <p>{l.text}</p>
+            </article>
+          ))}
+        </div>
+        <p class="center-cta"><a class="btn" href={waLink('Hola, quiero información de cupos 2027 en el Liceo Lunita de Chía.')} target="_blank" rel="noopener" data-track="whatsapp" data-where="niveles"><Icon name="whatsapp" /> Pregunta por cupos</a></p>
+      </div>
+    </section>
+
+    <!-- ================================================================ BENEFICIOS -->
+    <section class="section block-lilac horizon" id="por-que">
+      <div class="wrap">
+        <div class="section-head center">
+          <p class="kicker"><span class="dot"></span>Por qué elegir Lunita</p>
+          <h2>Aprender con <span class="hl">ciencia, arte</span> y corazón</h2>
+          <p>Más de 25 años formando niños y jóvenes en Chía, con un modelo propio y experiencias que se quedan para toda la vida.</p>
+        </div>
+
+        <div class="bento">
+          <article class="card b-stheami" data-guide="stheami|Así aprendemos: modelo STHEAMI">
+            <span class="chip t-purple">Modelo pedagógico propio</span>
+            <h3>STHEAMI</h3>
+            <p class="muted">Siete áreas que se unen en proyectos interdisciplinarios, con el estudiante como gestor de su propio aprendizaje (heutagogía). Toca cada letra:</p>
+            <div class="tiles" role="tablist" aria-label="Áreas del modelo STHEAMI">
+              {STHEAMI.map((s, i) => (
+                <button type="button" role="tab" class="tile" style={`--c:${s.color}`} aria-selected={i === 0 ? 'true' : 'false'} aria-controls="stheami-text" data-tile={i} data-name={s.name} data-text={s.text}>
+                  <b>{s.k}</b><span>{s.name}</span>
+                </button>
+              ))}
+            </div>
+            <p class="tile-text" id="stheami-text" role="tabpanel" aria-live="polite"><strong>{STHEAMI[0].name}:</strong> {STHEAMI[0].text}</p>
+          </article>
+
+          <article class="card b-photo b-band" data-guide="musica|¡Suena nuestra banda marcial!">
+            <div class="b-img"><Image src={festival} alt="Integrantes de la Banda Marcial del Liceo Lunita de Chía en el Festival Internacional de Bandas" widths={[480, 720]} sizes="(min-width: 1024px) 560px, 92vw" loading="lazy" /></div>
+            <div class="b-body">
+              <span class="chip t-pink">Arte y cultura</span>
+              <h3>Banda marcial y Festival Internacional</h3>
+              <p class="muted">Nuestra banda participa en festivales nacionales e internacionales y desde 2023 organizamos el Festival Internacional de Bandas Marciales <strong>"Ciudad de la Luna"</strong>, hoy en su 4.ª edición.</p>
+            </div>
+          </article>
+
+          <article class="card b-photo b-intl" data-guide="espacio|¡Con convenio internacional!">
+            <div class="b-img"><Image src={convenio} alt="Firma del convenio de bachillerato internacional con Florida Global University" widths={[480, 720]} sizes="(min-width: 1024px) 560px, 92vw" loading="lazy" /></div>
+            <div class="b-body">
+              <span class="chip t-sky">Bachillerato internacional</span>
+              <h3>Convenio con Florida Global University</h3>
+              <p class="muted">Convenio de bachillerato internacional, intercambios culturales y viajes pedagógicos para grado once.</p>
+            </div>
+          </article>
+
+          <article class="card b-care t-green">
+            <Sticker name="heart" size={64} />
+            <h3>Bienestar e inclusión</h3>
+            <p class="muted">Equipo interdisciplinar que acompaña a cada estudiante:</p>
+            <ul class="pills">
+              <li>Psicología</li><li>Fonoaudiología</li><li>Terapias de lenguaje</li><li>Terapias físicas</li><li>Procesos de inclusión</li><li>Rutas de convivencia</li>
+            </ul>
+          </article>
+
+          <article class="card b-award t-orange">
+            <Image class="award-img" src={premio} alt="Premio Excelencia Educativa 2026 del Liceo Lunita de Chía" width={120} height={120} loading="lazy" />
+            <div>
+              <span class="chip">Reconocimientos</span>
+              <h3>Premio a la Mejor Trayectoria en Educación Integral y Transformadora 2026</h3>
+              <p class="muted">Premios Excelencia Educativa. Además, colaboramos con el NASA Space Apps Challenge (Chía 2024 y Neiva 2025) y hemos aparecido en Semana y Cambio.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ VIAJES -->
+    <section class="section travel" id="viajes" data-guide="espacio|¡Nuestras promociones viajan por el mundo!" aria-labelledby="viajes-title">
+      <div class="wrap">
+        <div class="travel-head">
+          <Lunita size={230} pose="espacio" class="travel-luni" label="Lunita con una estrella fugaz que da la vuelta al mundo" />
+          <div class="section-head">
+            <p class="kicker"><span class="dot"></span>Viajes de promoción</p>
+            <h2 id="viajes-title">Nuestras promociones han <span class="hl">recorrido el mundo</span></h2>
+            <p>Desde Chía, nuestros estudiantes han vivido experiencias en <strong>Canadá, Europa, Londres, China y Cuba</strong>, entre otros destinos.</p>
+          </div>
+        </div>
+
+        <div class="route" data-reveal>
+          <div class="sky-deco" aria-hidden="true">
+            <svg class="cloud c1" viewBox="0 0 120 60"><path d="M25 55a22 22 0 0 1 2-44 30 30 0 0 1 56 6 19 19 0 0 1 12 38z" fill="#fff" /></svg>
+            <svg class="cloud c2" viewBox="0 0 120 60"><path d="M25 55a22 22 0 0 1 2-44 30 30 0 0 1 56 6 19 19 0 0 1 12 38z" fill="#fff" /></svg>
+            <svg class="cloud c3" viewBox="0 0 120 60"><path d="M25 55a22 22 0 0 1 2-44 30 30 0 0 1 56 6 19 19 0 0 1 12 38z" fill="#fff" /></svg>
+            <svg class="twk k1" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5L20 10l-7.5 2.5L10 20l-2.5-7.5L0 10l7.5-2.5z" fill="#ffc800" /></svg>
+            <svg class="twk k2" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5L20 10l-7.5 2.5L10 20l-2.5-7.5L0 10l7.5-2.5z" fill="#ce82ff" /></svg>
+            <svg class="twk k3" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5L20 10l-7.5 2.5L10 20l-2.5-7.5L0 10l7.5-2.5z" fill="#1cb0f6" /></svg>
+          </div>
+          {[{ id: 'h', pts: H_PTS, d: H_PATH, vb: '0 0 1210 420', cls: 'route-h' }, { id: 'v', pts: V_PTS, d: V_PATH, vb: '0 0 360 740', cls: 'route-v' }].map((r) => (
+            <svg class={`route-svg ${r.cls}`} viewBox={r.vb} role="img" aria-label="Recorrido: Chía, Canadá, Europa, Londres, China y Cuba">
+              <defs>
+                <mask id={`m-${r.id}`} maskUnits="userSpaceOnUse"><path class="route-reveal" d={r.d} pathLength="1" /></mask>
+              </defs>
+              <path class="route-line" d={r.d} mask={`url(#m-${r.id})`} />
+              {STOPS.map((s, i) => {
+                const [x, y] = r.pts[i];
+                const [c, dk] = COLORS[s.color];
+                return (
+                  <g class="stamp" style={`--i:${i}`} transform={`translate(${x} ${y})`}>
+                    <g class="stamp-in">
+                      <circle r="64" cy="7" fill={dk} />
+                      <circle r="64" fill={c} />
+                      <circle r="52" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="5 6" opacity=".85" />
+                      {i === 0 ? (
+                        <path d="M10-26a16 16 0 1 0 9 26 13 13 0 0 1-9-26z" fill="#fff" transform="translate(-4 -8)" />
+                      ) : (
+                        <path d="M18-30 -16-18l11 4 3 11 6-8 7 6z" fill="#fff" transform="translate(0 -4)" />
+                      )}
+                      <text y="32" text-anchor="middle" fill={s.color === 'yellow' ? '#0f1747' : '#fff'}>{s.name}</text>
+                    </g>
+                  </g>
+                );
+              })}
+              <g class="plane" aria-hidden="true">
+                <path d="M22 0-16-16-8 0-16 16z" fill="#0f1747" /><path d="M22 0-8 0-16 16z" fill="#303296" />
+                <animateMotion dur="9s" repeatCount="indefinite" rotate="auto" path={r.d} />
+              </g>
+            </svg>
+          ))}
+        </div>
+
+        <div class="also">
+          <span class="also-label">También:</span>
+          <span class="chip t-blue"><Icon name="rocket" /> Docentes y estudiantes en la NASA · Florida, 2018</span>
+          <span class="chip t-purple"><Icon name="music" /> Banda marcial en Honduras</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ COSTOS -->
+    <section class="section bg-cloud" id="costos" data-guide="admisiones|Valores claros, sin sorpresas">
+      <div class="wrap">
+        <div class="section-head center">
+          <p class="kicker"><span class="dot"></span>Costos</p>
+          <h2>Valores de referencia {COSTS.year}</h2>
+          <p>Publicados por el colegio para el año {COSTS.year}. <strong>Los valores de 2027 se confirman al momento de la matrícula.</strong></p>
+        </div>
+
+        <div class="costs">
+          <article class="card cost t-yellow">
+            <Sticker name="file" size={56} />
+            <h3>Formulario de inscripción</h3>
+            <p class="big">{cop(COSTS.form)}</p>
+            <p class="muted small">Pago único al inscribirse.</p>
+          </article>
+          <article class="card cost t-sky">
+            <Sticker name="calendar" size={56} />
+            <h3>Matrícula anual</h3>
+            <dl class="rows">
+              {COSTS.enrollment.map((r) => <div><dt>{r.level}</dt><dd>{cop(r.value)}</dd></div>)}
+            </dl>
+          </article>
+          <article class="card cost t-green">
+            <Sticker name="report" size={56} />
+            <h3>Pensión mensual</h3>
+            <dl class="rows">
+              {COSTS.tuition.map((r) => <div><dt>{r.level}<small>{r.grades}</small></dt><dd>{cop(r.value)}</dd></div>)}
+            </dl>
+          </article>
+          <article class="card cost t-purple">
+            <Sticker name="sparkle" size={56} />
+            <h3>Otros costos anuales</h3>
+            <p class="big">{cop(COSTS.other)}</p>
+            <p class="muted small">Valores pendientes por definir: {COSTS.pending}.</p>
+          </article>
+        </div>
+        <p class="note"><Icon name="help" /> Valores {COSTS.year} en pesos colombianos, como referencia. Confirma los valores 2027 con secretaría.</p>
+        <p class="center-cta"><a class="btn green" href={waCosts} target="_blank" rel="noopener" data-track="whatsapp" data-where="costos"><Icon name="whatsapp" /> Preguntar valores 2027</a></p>
+      </div>
+    </section>
+
+    <!-- ================================================================ PROCESO Y REQUISITOS -->
+    <section class="section" id="requisitos" data-guide="buscar|Marca tus documentos aquí mismo">
+      <div class="wrap">
+        <div class="section-head center">
+          <p class="kicker"><span class="dot"></span>Proceso de matrícula</p>
+          <h2>Matricúlate en <span class="hl">4 pasos</span></h2>
+          <p>Del {ENROLLMENT.dates}, en línea por la plataforma SIGA. {ENROLLMENT.hours}</p>
+        </div>
+        <div class="process">
+          <ol class="steps">
+            {ADMISSION_STEPS.map((s, i) => (
+              <li class={`stepcard t-${['yellow', 'sky', 'green', 'purple'][i]}`}>
+                <span class="num" aria-hidden="true">{i + 1}</span>
+                <div><h3>{s.title}</h3><p>{s.text}</p></div>
+              </li>
+            ))}
+            <li class="steps-cta">
+              <a class="btn blue" href={SITE.siga} target="_blank" rel="noopener" data-track="siga" data-where="pasos">Ir a matrícula en SIGA <Icon name="arrow-up-right" /></a>
+            </li>
+          </ol>
+
+          <div class="card checklist" data-checklist>
+            <div class="check-head">
+              <h3>Requisitos (11 documentos)</h3>
+              <p class="muted small" aria-live="polite"><span data-done>0</span> de {ADMISSION_DOCS.length} listos</p>
+              <div class="bar" aria-hidden="true"><i data-bar></i></div>
+            </div>
+            <ul>
+              {ADMISSION_DOCS.map((d, i) => (
+                <li><label><input type="checkbox" data-doc={i} /><span class="box" aria-hidden="true"><Icon name="check" /></span><span>{d}</span></label></li>
+              ))}
+            </ul>
+            <p class="muted small">Lista orientativa: confirma requisitos vigentes con secretaría. No guardamos lo que marques.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ FORMULARIO -->
+    <section class="section block-sky" id="contacto" data-guide="contacto|¡Escríbenos y te ayudamos!">
+      <div class="wrap form-grid">
+        <div class="form-copy">
+          <p class="kicker"><span class="dot"></span>Te acompañamos</p>
+          <h2>¿Te ayudamos con la matrícula?</h2>
+          <p class="lead-s">Déjanos tus datos y se abre WhatsApp con tu mensaje listo para enviar. Respondemos de {ENROLLMENT.hours.replace('Jornada continua de ', '')}</p>
+          <ul class="contact-list">
+            <li><a href={`tel:${SITE.phone}`} data-track="call" data-where="form"><Sticker name="phone" size={48} /> <span><small>Celular y WhatsApp</small>{SITE.phoneDisplay}</span></a></li>
+            <li><a href={`tel:${SITE.landline}`} data-track="call" data-where="form-fijo"><Sticker name="phone" size={48} class="t-green" /> <span><small>Teléfono fijo</small>{SITE.landlineDisplay}</span></a></li>
+            <li><a href={`mailto:${SITE.email}`}><Sticker name="mail" size={48} /> <span><small>Correo</small>{SITE.email}</span></a></li>
+          </ul>
+        </div>
+        <form class="card lead-form" data-form novalidate>
+          <h3>Quiero información</h3>
+          <label for="f-name">Nombre del acudiente</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required minlength="3" placeholder="Ej.: Ana Gómez" />
+          <label for="f-grade">Grado de interés para 2027</label>
+          <select id="f-grade" name="grade" required>
+            <option value="">Selecciona un grado</option>
+            {GRADES.map((g) => <option>{g}</option>)}
+          </select>
+          <label for="f-phone">Teléfono</label>
+          <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required pattern="[0-9 +()-]{7,}" placeholder="Ej.: 300 123 4567" />
+          <p class="form-error" data-error role="alert" hidden></p>
+          <button class="btn green" type="submit"><Icon name="whatsapp" /> Enviar por WhatsApp</button>
+          <p class="muted small privacy">No guardamos tus datos: el mensaje se abre en tu WhatsApp y tú decides si lo envías.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ================================================================ PREGUNTAS -->
+    <section class="section" id="preguntas" data-guide="buscar|¿Dudas? Aquí te respondo">
+      <div class="wrap narrow">
+        <div class="section-head center">
+          <p class="kicker"><span class="dot"></span>Preguntas frecuentes</p>
+          <h2>Resolvemos tus dudas</h2>
+        </div>
+        <div class="faq">
+          {FAQ.map((f, i) => (
+            <details open={i === 0}>
+              <summary>{f.q}<span class="plus" aria-hidden="true"></span></summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================ CTA FINAL -->
+    <section class="section block-yellow final" data-guide="celebra|¡Te esperamos en Lunita!">
+      <div class="wrap final-grid">
+        <Lunita size={260} pose="celebra" class="final-luni" label="Lunita celebra las matrículas abiertas" />
+        <div>
+          <p class="kicker"><span class="dot"></span>Matrículas 2027 abiertas</p>
+          <h2>Del 1 al 17 de diciembre de 2026, <span class="hl">te esperamos</span></h2>
+          <p class="lead-s">Matrículas para Jardín, Transición, Primaria y Bachillerato. Escríbenos y agenda tu visita.</p>
+          <div class="ctas">
+            <a class="btn navy" href={waVisit} target="_blank" rel="noopener" data-track="whatsapp" data-where="final"><Icon name="whatsapp" /> Agendar por WhatsApp</a>
+            <a class="btn outline" href={`tel:${SITE.landline}`} data-track="call" data-where="final"><Icon name="phone" /> {SITE.landlineDisplay}</a>
+            <a class="btn blue" href={SITE.siga} target="_blank" rel="noopener" data-track="siga" data-where="final">Ir a matrícula en SIGA</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <div>
+        <p class="foot-brand"><img src={`${base}escudo.svg`} width="36" height="42" alt="" /> Liceo Lunita de Chía</p>
+        <p class="muted small">{SITE.slogan}. {SITE.city}.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href={`tel:${SITE.phone}`} data-track="call" data-where="footer">{SITE.phoneDisplay}</a></li>
+        <li><a href={`tel:${SITE.landline}`} data-track="call" data-where="footer">{SITE.landlineDisplay}</a></li>
+        <li><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+        <li><a href={SITE.social.facebook} target="_blank" rel="noopener">Facebook</a> · <a href={SITE.social.instagram} target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href={SITE.url} target="_blank" rel="noopener">Sitio institucional</a></li>
+      </ul>
+    </div>
+    <p class="wrap muted small foot-note">Costos {COSTS.year} publicados por el colegio, solo como referencia. Video y música originales del Liceo Lunita de Chía.</p>
+  </footer>
+
+  <!-- Lunita guía: acompaña el recorrido y cambia de pose en cada sección -->
+  <aside class="guide" data-guide-el aria-label="Lunita, tu guía">
+    <p class="bubble" data-bubble aria-live="polite">¡Hola! Soy Lunita. Te muestro el colegio</p>
+    <Lunita size={120} pose="hola" poses={['hola', 'estudio', 'stheami', 'musica', 'espacio', 'admisiones', 'buscar', 'contacto', 'celebra']} track={false} class="guide-luni" label="Lunita, la guía de la página" />
+  </aside>
+
+  <!-- Barra fija de contacto en celular -->
+  <nav class="mbar" aria-label="Contacto rápido">
+    <a class="mb wa" href={wa} target="_blank" rel="noopener" data-track="whatsapp" data-where="barra"><Icon name="whatsapp" /><span>WhatsApp</span></a>
+    <a class="mb call" href={`tel:${SITE.phone}`} data-track="call" data-where="barra"><Icon name="phone" /><span>Llamar</span></a>
+    <a class="mb siga" href={SITE.siga} target="_blank" rel="noopener" data-track="siga" data-where="barra"><Icon name="laptop" /><span>SIGA</span></a>
+  </nav>
+</Base>
+
+<script>
+  import '@/scripts/landing';
+</script>
