@@ -101,17 +101,38 @@
   .vchip span { display: none; }
   .vbar { right: 16px; bottom: 16px; }
   .vbtn.play { width: 68px; height: 68px; }
-  .badge { font-size: 0.8rem; }
 }
 
 /* ---------------------------------------------------------------- Cifras -- */
-.stats { background: #fff; border-block: 2px solid var(--line); padding: clamp(1.6rem, 3vw, 2.4rem) 0; }
-.stats-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-@media (min-width: 640px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1024px) { .stats-row { grid-template-columns: repeat(6, 1fr); } }
-.stat { text-align: center; padding: 0.6rem; }
-.stat b { display: block; font-size: clamp(2rem, 1.5rem + 2vw, 2.9rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: var(--ct); font-variant-numeric: tabular-nums; }
-.stat span:last-child { display: block; margin-top: 0.35rem; font-weight: 800; color: var(--ink-2); font-size: 0.92rem; }
+.stats { position: relative; background: var(--ivory); padding: 0 0 clamp(2.6rem, 5vw, 4rem); }
+.stats .muisca { margin-bottom: clamp(1.8rem, 4vw, 2.8rem); }
+.stats-title { margin: 0 0 1.2rem; text-align: center; font-size: 1rem; }
+.stats-title .kicker { margin: 0; color: var(--blue); }
+.stats-grid { display: grid; gap: clamp(0.6rem, 1.6vw, 1.2rem); grid-template-columns: repeat(3, 1fr); }
+@media (min-width: 1000px) { .stats-grid { grid-template-columns: repeat(3, 1fr) 1.75fr; } }
+.scard { display: grid; justify-items: center; align-content: start; gap: 0.25rem; text-align: center; padding: clamp(0.9rem, 2.4vw, 1.6rem) 0.5rem; border-radius: 28px; background: #fff;
+  border: 2px solid var(--line); border-bottom: 6px solid var(--c); transition: transform 0.25s var(--spring); }
+.scard:hover { transform: translateY(-4px) rotate(-1deg); }
+.scard b { font-size: clamp(2rem, 1.2rem + 3.2vw, 3.6rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; margin-top: 0.35rem; }
+.scard > span:last-child { font-weight: 800; color: var(--ct); font-size: clamp(0.78rem, 0.7rem + 0.4vw, 1rem); line-height: 1.25; }
+.podium { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: clamp(1rem, 2.4vw, 1.4rem) clamp(1rem, 2.6vw, 1.8rem); border-radius: 28px;
+  background: var(--purple-l); border: 2px solid color-mix(in srgb, var(--purple) 35%, transparent); border-bottom: 6px solid var(--purple-d); }
+@media (min-width: 1000px) { .podium { grid-column: auto; flex-direction: column; align-items: stretch; } }
+.podium-title { display: flex; align-items: center; gap: 0.5rem; margin: 0; font-weight: 900; color: var(--purple-ink); font-size: 1.05rem; line-height: 1.1; }
+.medals { list-style: none; margin: 0; padding: 0; display: flex; justify-content: space-around; align-items: flex-end; gap: clamp(0.5rem, 2vw, 1.2rem); flex: 1; }
+.medal { position: relative; isolation: isolate; display: grid; justify-items: center; gap: 0.35rem; }
+.disc { position: relative; display: grid; place-items: center; width: clamp(66px, 9vw, 92px); aspect-ratio: 1; border-radius: 50%; background: var(--mc); box-shadow: 0 5px 0 var(--md), inset 0 0 0 5px rgb(255 255 255 / 0.55); }
+.disc::before { content: ''; position: absolute; z-index: -1; top: -14px; left: 50%; width: 46%; height: 30px; translate: -50% 0; background: linear-gradient(90deg, var(--md) 0 48%, transparent 48% 52%, var(--md) 52%); clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%); }
+.disc b { font-size: clamp(1.15rem, 0.8rem + 1.2vw, 1.7rem); font-weight: 900; color: #0f1747; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.m0 { --mc: #ffc800; --md: #e5a400; } .m0 .disc { width: clamp(78px, 10.5vw, 108px); }
+.m1 { --mc: #a9e2ff; --md: #1899d6; } .m2 { --mc: #f1d4ff; --md: #a568cc; }
+.mlabel { font-weight: 800; color: var(--purple-ink); font-size: clamp(0.78rem, 0.7rem + 0.3vw, 0.95rem); }
+@media (max-width: 520px) {
+  .podium { flex-direction: column; align-items: stretch; }
+  .podium-title { justify-content: center; }
+  .scard .sticker { --sz: 44px !important; }
+  .scard { border-radius: 22px; }
+}
 
 /* ---------------------------------------------------------------- Niveles -- */
 .stairs { list-style: none; padding: 0; margin: 0 auto clamp(2rem, 4vw, 3rem); display: flex; align-items: flex-end; justify-content: center; gap: clamp(6px, 1.2vw, 14px); max-width: 760px; height: 190px; }
@@ -135,7 +156,7 @@
 
 /* ---------------------------------------------------------------- Beneficios -- */
 .bento { display: grid; gap: clamp(1rem, 2vw, 1.4rem); }
-@media (min-width: 900px) {
+@media (min-width: 640px) {
   .bento { grid-template-columns: repeat(6, 1fr); }
   .b-stheami { grid-column: span 6; }
   .b-band, .b-intl { grid-column: span 3; }
@@ -164,7 +185,7 @@
 .b-award { display: flex; gap: 1.2rem; align-items: flex-start; }
 .award-img { width: 110px; height: 110px; border-radius: 22px; flex: none; object-fit: cover; }
 .b-award .chip { background: var(--l); color: var(--ct); }
-@media (max-width: 560px) { .b-award { flex-direction: column; } }
+@media (max-width: 1100px) { .b-award { flex-direction: column; } .award-img { width: 88px; height: 88px; } }
 
 /* ---------------------------------------------------------------- Viajes -- */
 .travel { background: linear-gradient(180deg, #fff 0%, var(--sky-l) 100%); overflow: hidden; }
@@ -329,12 +350,60 @@ main > section.hero { padding-top: calc(var(--header-h) + clamp(2.6rem, 5vw, 4.5
 @keyframes twk { 0%, 100% { transform: scale(0.6) rotate(0); opacity: 0.5; } 50% { transform: scale(1.2) rotate(30deg); opacity: 1; } }
 @media (max-width: 720px) { .c1 { left: 55%; top: 2%; } .c2 { left: 2%; top: 40%; } .c3 { right: -6%; top: 75%; } }
 
-/* Celular: Lunita protagonista junto al titular */
+/* Celular y tablet: título → video (con Lunita asomada) → texto → botones */
 @media (max-width: 979px) {
-  .hero-media { position: static; padding-top: 0; }
-  .hero-copy { position: relative; }
-  .luni-hero { top: calc(var(--header-h) + 100px); right: 0; width: clamp(118px, 32vw, 170px); }
+  .hero-grid { display: flex; flex-direction: column; gap: 0; }
+  .hero-copy { display: contents; }
+  .hero-title { order: 1; margin-bottom: 0; }
+  .hero-media { order: 2; position: relative; width: 100%; max-width: 680px; margin: clamp(0.4rem, 2vw, 1rem) auto clamp(1.4rem, 4vw, 2rem); padding-top: 0; }
+  .hero .lead { order: 3; } .hero .ctas { order: 4; margin-top: 1.2rem; } .hero .trust { order: 5; }
+  .luni-hero { top: -62px; right: -4px; width: clamp(112px, 27vw, 180px); }
   .s-planet { display: none; }
-  .hero-title .t1 { padding-right: clamp(100px, 30vw, 160px); }
+  .hero-title .rot { margin-top: 0.18em; }
+}
+@media (min-width: 640px) and (max-width: 979px) {
+  .hero { text-align: center; }
+  .hero-title > span > span { margin-inline: auto; }
+  .hero-title .rot { margin-inline: auto; }
+  .hero .lead { margin-inline: auto; }
+  .hero .ctas, .hero .trust { justify-content: center; }
+  .luni-hero { right: -24px; }
 }
 @media (prefers-reduced-motion: reduce) { .cloud, .twk { animation: none; } }
+
+/* ---------------------------------------------------------------- Ajustes celular / tablet -- */
+@media (max-width: 979px) {
+  .s-moon { top: auto; bottom: 30%; left: -46px; width: 96px; }
+  .s-rombo { left: auto; right: 3%; bottom: 1.5%; width: 52px; }
+  .s-sun { right: -34px; bottom: 16%; width: 90px; }
+}
+/* Niveles: 3 columnas en tablet, carrusel deslizable en celular */
+@media (min-width: 720px) and (max-width: 1023px) {
+  .levels.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .levels.cols-3 > :last-child:nth-child(odd) { grid-column: auto; }
+  .level h3 { font-size: var(--step-1); }
+  .level p { font-size: 0.95rem; }
+}
+@media (max-width: 719px) {
+  .levels { display: grid; grid-auto-flow: column; grid-auto-columns: 80%; grid-template-columns: none; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+    margin-inline: calc(var(--gutter) * -1); padding: 6px var(--gutter) 18px; scroll-padding-inline: var(--gutter); scrollbar-width: none; }
+  .levels::-webkit-scrollbar { display: none; }
+  .levels > * { scroll-snap-align: start; }
+  .swipe-hint { display: flex; }
+  .step-flag .sticker { --sz: 44px !important; }
+}
+.swipe-hint { display: none; align-items: center; justify-content: center; gap: 0.4rem; margin: 0.4rem 0 0; color: var(--muted); font-weight: 800; font-size: 0.85rem; }
+.swipe-hint svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.4; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: translateX(6px); } }
+/* STHEAMI en celular: 4 + 3 fichas con nombre */
+@media (max-width: 560px) {
+  .tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 10px; }
+  .tile { width: calc(25% - 8px); }
+  .tile span { display: block; font-size: 0.7rem; }
+  .tile b { font-size: 1.9rem; }
+}
+/* Contacto: el correo cabe en una línea */
+@media (max-width: 480px) {
+  .contact-list a { font-size: 1.02rem; }
+  .contact-list li:last-child a span { font-size: 0.86rem; overflow-wrap: anywhere; }
+}

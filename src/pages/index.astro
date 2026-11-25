@@ -55,6 +55,7 @@ const V_PATH = curve(V_PTS, true);
 ---
 
 <Base
+  preloadImage={`${base}video/poster.webp`}
   title="Matrículas 2027 abiertas · Liceo Lunita de Chía — De Jardín a Bachillerato"
   description="Matrículas 2027 del 1 al 17 de diciembre de 2026. Colegio en Chía de Jardín a Bachillerato con modelo STHEAMI, banda marcial, convenio de bachillerato internacional y viajes por el mundo. Escríbenos por WhatsApp."
 >
@@ -81,7 +82,6 @@ const V_PATH = curve(V_PTS, true);
 
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <p class="badge"><span class="pulse" aria-hidden="true"></span> Matrículas 2027 · {ENROLLMENT.dates}</p>
           <h1 id="hero-title" class="hero-title">
             <span class="sr-only">Matrículas 2027 en Chía, de Jardín a Bachillerato: donde cada estudiante brilla con luz propia</span>
             <span aria-hidden="true">
@@ -137,12 +137,38 @@ const V_PATH = curve(V_PTS, true);
     </section>
 
     <!-- ================================================================ CIFRAS -->
-    <section class="stats" aria-label="Resultados del colegio">
-      <div class="wrap stats-row">
-        <div class="stat t-yellow"><b><span data-count={SITE.foundingYears}>{SITE.foundingYears}</span>+</b><span>Años en Chía</span></div>
-        {STATS.map((s, i) => (
-          <div class:list={['stat', ['t-sky', 't-green', 't-orange', 't-purple', 't-red'][i]]}><b><span data-count={s.value}>{s.value}</span>{s.suffix}</b><span>{s.label}</span></div>
-        ))}
+    <section class="stats" aria-labelledby="stats-title">
+      <div class="muisca thin" aria-hidden="true"></div>
+      <div class="wrap">
+        <h2 id="stats-title" class="stats-title"><span class="kicker"><span class="dot"></span>Resultados que nos enorgullecen</span></h2>
+        <div class="stats-grid">
+          <div class="scard t-yellow" data-reveal="pop" style="--d:0">
+            <Sticker name="moon" size={58} />
+            <b><span data-count={SITE.foundingYears}>{SITE.foundingYears}</span>+</b>
+            <span>años formando en Chía</span>
+          </div>
+          <div class="scard t-sky" data-reveal="pop" style="--d:1">
+            <Sticker name="cap" size={58} />
+            <b><span data-count={STATS[0].value}>{STATS[0].value}</span>+</b>
+            <span>bachilleres graduados</span>
+          </div>
+          <div class="scard t-green" data-reveal="pop" style="--d:2">
+            <Sticker name="people" size={58} />
+            <b><span data-count={STATS[1].value}>{STATS[1].value}</span></b>
+            <span>promociones</span>
+          </div>
+          <div class="podium t-purple" data-reveal="pop" style="--d:3">
+            <p class="podium-title"><Sticker name="award" size={44} tile={false} /> Nuestros puestos</p>
+            <ol class="medals">
+              {STATS.slice(2).map((s, i) => (
+                <li class={`medal m${i}`}>
+                  <span class="disc"><b><span data-count={s.value}>{s.value}</span>{s.suffix}</b></span>
+                  <span class="mlabel">{s.label.replace('Puesto ', '')}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -160,7 +186,7 @@ const V_PATH = curve(V_PTS, true);
           <li class="step-flag" aria-hidden="true"><Sticker name="cap" size={64} tile={false} /></li>
         </ol>
 
-        <div class="grid cols-3 levels">
+        <div class="grid cols-3 levels" role="region" aria-label="Niveles: Preescolar, Primaria y Bachillerato" tabindex="0">
           {LEVELS.map((l) => (
             <article class={`level card t-${l.theme}`}>
               <div class="level-img">
@@ -172,6 +198,7 @@ const V_PATH = curve(V_PTS, true);
             </article>
           ))}
         </div>
+        <p class="swipe-hint" aria-hidden="true">Desliza para ver los niveles <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></p>
         <p class="center-cta"><a class="btn" href={waLink('Hola, quiero información de cupos 2027 en el Liceo Lunita de Chía.')} target="_blank" rel="noopener" data-track="whatsapp" data-where="niveles"><Icon name="whatsapp" /> Pregunta por cupos</a></p>
       </div>
     </section>
