@@ -1,0 +1,106 @@
+---
+/**
+ * "Exigentes en lo académico, libres para crear": Lunita mantiene el equilibrio en un balancín
+ * entre la exigencia académica (izquierda) y la creatividad y expresión (derecha).
+ */
+import Lunita from './Lunita.astro';
+import Sticker from './Sticker.astro';
+
+const LEFT = [
+  { t: 'Alta intensidad académica', d: 'Jornada completa y seguimiento cercano en cada grado.', icon: 'book' },
+  { t: 'Entrenamiento PREICFES', d: 'Con Instruimos, junto con la Universidad Nacional.', icon: 'target' },
+  { t: 'Resultados que se ven', d: '4.° puesto municipal y 13.° departamental.', icon: 'report' },
+];
+const RIGHT = [
+  { t: 'Arte, música y banda', d: 'Banda marcial y Festival Internacional "Ciudad de la Luna".', icon: 'music' },
+  { t: 'Expresión y palabra', d: 'Lectura, oratoria y proyectos para que cada voz se escuche.', icon: 'megaphone' },
+  { t: 'Crear con tecnología', d: 'Realidad virtual, robótica y tecnologías emergentes.', icon: 'laptop' },
+];
+---
+
+<section class="section balance" id="equilibrio" data-guide="stheami|Cabeza y corazón, en equilibrio" aria-labelledby="balance-title">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="kicker"><span class="dot"></span>Nuestro sello</p>
+      <h2 id="balance-title">Exigentes en lo académico, <span class="hl">libres para crear</span></h2>
+      <p>Un colegio de alta intensidad que también cuida la creatividad y la expresión de cada estudiante.</p>
+    </div>
+
+    <div class="bal-stage" data-live>
+      <ul class="bal-list left t-sky">
+        {LEFT.map((x, i) => (
+          <li data-reveal="left" style={`--d:${i}`}><Sticker name={x.icon} size={52} /><div><strong>{x.t}</strong><span>{x.d}</span></div></li>
+        ))}
+      </ul>
+
+      <div class="seesaw" aria-hidden="true">
+        <div class="saw-luni"><Lunita size={150} pose="hola" track={false} label="Lunita en equilibrio" /></div>
+        <svg viewBox="0 0 600 300" class="saw-svg">
+          <g class="beam">
+            <!-- Izquierda: libros, birrete y regla -->
+            <g class="load-l">
+              <rect x="70" y="150" width="96" height="22" rx="6" fill="#1899d6" /><rect x="78" y="128" width="84" height="22" rx="6" fill="#ffc800" /><rect x="66" y="106" width="92" height="22" rx="6" fill="#58cc02" />
+              <path d="M80 117h64M88 139h60M84 161h70" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7" />
+              <path d="M74 88l38-16 38 16-38 16z" fill="#0f1747" /><path d="M88 94v10c14 9 34 9 48 0V94l-24 10z" fill="#303296" /><path d="M146 90v16" stroke="#ffc800" stroke-width="3" /><circle cx="146" cy="108" r="4" fill="#ffc800" />
+              <text x="104" y="210" text-anchor="middle" class="saw-tag">Exigencia</text>
+            </g>
+            <!-- Derecha: paleta, nota y estrella -->
+            <g class="load-r">
+              <path d="M492 172c-36 0-56-16-56-40s24-44 56-44 52 14 52 34c0 12-8 18-20 18h-10c-8 0-10 6-8 12s0 20-14 20z" fill="#ff86d0" />
+              <circle cx="466" cy="120" r="8" fill="#ffc800" /><circle cx="494" cy="104" r="8" fill="#1cb0f6" /><circle cx="522" cy="114" r="8" fill="#58cc02" /><circle cx="470" cy="150" r="10" fill="#fff" />
+              <g class="note"><path d="M520 70V30l30-6v36" fill="none" stroke="#7b35b8" stroke-width="6" stroke-linejoin="round" /><circle cx="512" cy="72" r="10" fill="#ce82ff" /><circle cx="542" cy="62" r="10" fill="#ce82ff" /></g>
+              <path class="star" d="M440 60l6 12 13 2-10 9 3 13-12-7-12 7 3-13-10-9 13-2z" fill="#ffc800" />
+              <text x="492" y="210" text-anchor="middle" class="saw-tag">Creatividad</text>
+            </g>
+            <rect x="40" y="176" width="520" height="18" rx="9" fill="#e5a400" /><rect x="40" y="172" width="520" height="18" rx="9" fill="#ffc800" />
+          </g>
+          <path d="M300 184l46 88h-92z" fill="#22246f" /><path d="M300 184l46 88h-46z" fill="#303296" />
+          <circle cx="300" cy="184" r="12" fill="#fff" stroke="#22246f" stroke-width="5" />
+          <ellipse cx="300" cy="280" rx="120" ry="10" fill="#0f1747" opacity=".08" />
+        </svg>
+      </div>
+
+      <ul class="bal-list right t-pink">
+        {RIGHT.map((x, i) => (
+          <li data-reveal="right" style={`--d:${i}`}><Sticker name={x.icon} size={52} /><div><strong>{x.t}</strong><span>{x.d}</span></div></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .balance { background: #fff; overflow: hidden; }
+  .bal-stage { display: grid; gap: clamp(1.2rem, 3vw, 2rem); align-items: center; }
+  @media (min-width: 1000px) { .bal-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1.55fr) minmax(0, 1fr); } }
+  .bal-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.8rem; }
+  .bal-list li { display: flex; gap: 0.9rem; align-items: center; padding: 0.9rem 1rem; border-radius: 22px; background: #fff; border: 2px solid var(--line); border-bottom: 5px solid var(--c); }
+  .bal-list strong { display: block; color: var(--navy); font-weight: 900; font-size: 1.05rem; line-height: 1.2; }
+  .bal-list span { display: block; color: var(--ink-2); font-size: 0.93rem; line-height: 1.35; margin-top: 0.15rem; }
+  .t-pink { --c: #ff86d0; --cd: #e266b3; --l: #ffe6f5; --ct: #c60079; }
+  .seesaw { position: relative; container-type: inline-size; max-width: 560px; margin-inline: auto; width: 100%; padding-top: 70px; }
+  .saw-luni { position: absolute; left: 35%; top: calc(70px + 1.4cqw); width: 30%; z-index: 1; transform-origin: 50% 100%; }
+  .saw-luni :global(.lunita) { --s: 100% !important; width: 100%; }
+  .saw-svg { width: 100%; height: auto; overflow: visible; }
+  .saw-tag { font-family: var(--font); font-weight: 900; font-size: 22px; fill: #0f1747; }
+  .beam { transform-box: view-box; transform-origin: 300px 184px; }
+  .note, .star { transform-box: fill-box; transform-origin: center; }
+  @media (prefers-reduced-motion: no-preference) {
+    .live .beam { animation: rock 5s ease-in-out infinite; }
+    .live .saw-luni { animation: ride 5s ease-in-out infinite; }
+    .live .note { animation: hop 1.6s ease-in-out infinite; }
+    .live .star { animation: twinkle 2.2s ease-in-out infinite; }
+  }
+  @keyframes rock { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+  @keyframes ride { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+  @keyframes hop { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-10px) rotate(-8deg); } }
+  @keyframes twinkle { 0%, 100% { transform: scale(0.8) rotate(0); } 50% { transform: scale(1.2) rotate(25deg); } }
+  @media (max-width: 999px) {
+    .bal-stage { grid-template-areas: 'saw' 'l' 'r'; }
+    .seesaw { grid-area: saw; max-width: 460px; }
+    .left { grid-area: l; } .right { grid-area: r; }
+  }
+  @media (min-width: 640px) and (max-width: 999px) {
+    .bal-stage { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: 'saw saw' 'l r'; align-items: start; }
+  }
+</style>

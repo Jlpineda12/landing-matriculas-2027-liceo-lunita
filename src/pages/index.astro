@@ -9,7 +9,11 @@ import Base from '@/layouts/Base.astro';
 import Lunita from '@/components/Lunita.astro';
 import Icon from '@/components/Icon.astro';
 import Sticker from '@/components/Sticker.astro';
-import { SITE, ENROLLMENT, COSTS, cop, STATS, STHEAMI, LEVELS, GRADES, TRIPS, ADMISSION_STEPS, ADMISSION_DOCS, FAQ, waLink } from '@/data/site';
+import Illus from '@/components/Illus.astro';
+import Balance from '@/components/Balance.astro';
+import Countdown from '@/components/Countdown.astro';
+import PromoModal from '@/components/PromoModal.astro';
+import { SITE, ENROLLMENT, COSTS, cop, STATS, PRESS, STHEAMI, LEVELS, GRADES, TRIPS, ADMISSION_STEPS, ADMISSION_DOCS, FAQ, waLink } from '@/data/site';
 
 import preescolar from '@/assets/preescolar.jpg';
 import primaria from '@/assets/primaria.jpg';
@@ -65,7 +69,7 @@ const V_PATH = curve(V_PTS, true);
       <span>Liceo Lunita <small>de Chía</small></span>
     </a>
     <nav class="top-nav" aria-label="Secciones">
-      <a href="#niveles">Niveles</a><a href="#por-que">Por qué Lunita</a><a href="#viajes">Viajes</a><a href="#costos">Costos</a><a href="#requisitos">Requisitos</a>
+      <a href="#niveles">Niveles</a><a href="#experiencias">Experiencias</a><a href="#viajes">Viajes</a><a href="#costos">Costos</a><a href="#requisitos">Requisitos</a>
     </nav>
     <a class="btn green sm" href={wa} target="_blank" rel="noopener" data-track="whatsapp" data-where="header" aria-label="Escríbenos por WhatsApp"><Icon name="whatsapp" /> <span class="hide-xs">WhatsApp</span></a>
   </header>
@@ -136,6 +140,8 @@ const V_PATH = curve(V_PTS, true);
       </div>
     </section>
 
+    <Countdown />
+
     <!-- ================================================================ CIFRAS -->
     <section class="stats" aria-labelledby="stats-title">
       <div class="muisca thin" aria-hidden="true"></div>
@@ -168,6 +174,15 @@ const V_PATH = curve(V_PTS, true);
               ))}
             </ol>
           </div>
+        </div>
+        <div class="press" data-reveal>
+          <span class="press-k">Nos destacaron</span>
+          {PRESS.map((p) => (
+            <a class="press-item" href={p.url} target="_blank" rel="noopener">
+              <b>{p.outlet}</b><span>{p.title}</span><Icon name="arrow-up-right" />
+            </a>
+          ))}
+          <span class="press-item award"><Image class="press-img" src={premio} alt="" width={44} height={44} /><b>2026</b><span>Premio a la Mejor Trayectoria en Educación Integral y Transformadora · Premios Excelencia Educativa</span></span>
         </div>
       </div>
     </section>
@@ -203,13 +218,15 @@ const V_PATH = curve(V_PTS, true);
       </div>
     </section>
 
-    <!-- ================================================================ BENEFICIOS -->
-    <section class="section block-lilac horizon" id="por-que">
+    <Balance />
+
+    <!-- ================================================================ EXPERIENCIAS -->
+    <section class="section block-lilac horizon" id="experiencias">
       <div class="wrap">
         <div class="section-head center">
-          <p class="kicker"><span class="dot"></span>Por qué elegir Lunita</p>
-          <h2>Aprender con <span class="hl">ciencia, arte</span> y corazón</h2>
-          <p>Más de 25 años formando niños y jóvenes en Chía, con un modelo propio y experiencias que se quedan para toda la vida.</p>
+          <p class="kicker"><span class="dot"></span>Experiencias Lunita</p>
+          <h2>Lo que vivirá <span class="hl">tu hijo</span> en Lunita</h2>
+          <p>Ciencia, tecnología, deporte, arte y bienestar: experiencias que se quedan para toda la vida.</p>
         </div>
 
         <div class="bento">
@@ -225,6 +242,43 @@ const V_PATH = curve(V_PTS, true);
               ))}
             </div>
             <p class="tile-text" id="stheami-text" role="tabpanel" aria-live="polite"><strong>{STHEAMI[0].name}:</strong> {STHEAMI[0].text}</p>
+          </article>
+
+          <article class="card b-ill s3 t-purple" data-guide="espacio|¡Tecnología del futuro, hoy!">
+            <div class="ill-box"><Illus kind="vr" label="Visor de realidad virtual rodeado de figuras flotantes" /></div>
+            <span class="chip">Tecnología</span>
+            <h3>Realidad virtual y tecnologías emergentes</h3>
+            <p class="muted">Proyectos con realidad virtual, robótica y programación para que creen con la tecnología, no solo la usen.</p>
+          </article>
+
+          <article class="card b-ill s3 t-sky" data-guide="espacio|¡Hasta la NASA!">
+            <div class="ill-box"><Illus kind="rocket" label="Cohete despegando desde la luna" /></div>
+            <span class="chip">Ciencia y espacio</span>
+            <h3>NASA Space Apps Challenge</h3>
+            <p class="muted">Fuimos sede del reto en Chía (2024) y colaboradores en Neiva (2025). Docentes y estudiantes se han formado en la NASA, en Florida.</p>
+          </article>
+
+          <article class="card b-ill s2 t-sky" data-guide="hola|¡A nadar con instructores!">
+            <div class="ill-box"><Illus kind="pool" label="Piscina con un flotador y olas" /></div>
+            <span class="chip">Deporte</span>
+            <h3>Piscina con instructores</h3>
+            <p class="muted">Los niños aprenden a nadar con instructores, con seguridad y confianza.</p>
+          </article>
+
+          <article class="card b-ill s2 t-green" data-guide="estudio|¡Listos para el ICFES!">
+            <div class="ill-box"><Illus kind="preicfes" label="Hoja de respuestas y gráfica de resultados en ascenso" /></div>
+            <span class="chip">Bachillerato</span>
+            <h3>PREICFES con Instruimos</h3>
+            <p class="muted">Entrenamiento para las pruebas Saber 11 con Instruimos, junto con la Universidad Nacional.</p>
+          </article>
+
+          <article class="card b-care s2 t-green">
+            <Sticker name="heart" size={64} />
+            <h3>Bienestar e inclusión</h3>
+            <p class="muted">Equipo interdisciplinar que acompaña a cada estudiante:</p>
+            <ul class="pills">
+              <li>Psicología</li><li>Fonoaudiología</li><li>Terapias de lenguaje</li><li>Terapias físicas</li><li>Procesos de inclusión</li><li>Rutas de convivencia</li>
+            </ul>
           </article>
 
           <article class="card b-photo b-band" data-guide="musica|¡Suena nuestra banda marcial!">
@@ -245,36 +299,21 @@ const V_PATH = curve(V_PTS, true);
             </div>
           </article>
 
-          <article class="card b-care t-green">
-            <Sticker name="heart" size={64} />
-            <h3>Bienestar e inclusión</h3>
-            <p class="muted">Equipo interdisciplinar que acompaña a cada estudiante:</p>
-            <ul class="pills">
-              <li>Psicología</li><li>Fonoaudiología</li><li>Terapias de lenguaje</li><li>Terapias físicas</li><li>Procesos de inclusión</li><li>Rutas de convivencia</li>
-            </ul>
-          </article>
 
-          <article class="card b-award t-orange">
-            <Image class="award-img" src={premio} alt="Premio Excelencia Educativa 2026 del Liceo Lunita de Chía" width={120} height={120} loading="lazy" />
-            <div>
-              <span class="chip">Reconocimientos</span>
-              <h3>Premio a la Mejor Trayectoria en Educación Integral y Transformadora 2026</h3>
-              <p class="muted">Premios Excelencia Educativa. Además, colaboramos con el NASA Space Apps Challenge (Chía 2024 y Neiva 2025) y hemos aparecido en Semana y Cambio.</p>
-            </div>
-          </article>
+
         </div>
       </div>
     </section>
 
     <!-- ================================================================ VIAJES -->
-    <section class="section travel" id="viajes" data-guide="espacio|¡Nuestras promociones viajan por el mundo!" aria-labelledby="viajes-title">
+    <section class="section travel" id="viajes" data-guide="espacio|¡Cada promoción tiene su viaje!" aria-labelledby="viajes-title">
       <div class="wrap">
         <div class="travel-head">
           <Lunita size={230} pose="espacio" class="travel-luni" label="Lunita con una estrella fugaz que da la vuelta al mundo" />
           <div class="section-head">
             <p class="kicker"><span class="dot"></span>Viajes de promoción</p>
-            <h2 id="viajes-title">Nuestras promociones han <span class="hl">recorrido el mundo</span></h2>
-            <p>Desde Chía, nuestros estudiantes han vivido experiencias en <strong>Canadá, Europa, Londres, China y Cuba</strong>, entre otros destinos.</p>
+            <h2 id="viajes-title">Cada promoción vive <span class="hl">su propio viaje</span></h2>
+            <p>Al cerrar su etapa escolar, cada promoción tiene su viaje de promoción. Nuestros estudiantes ya han conocido <strong>Canadá, Europa, Londres, China y Cuba</strong>, entre otros destinos.</p>
           </div>
         </div>
 
@@ -497,6 +536,8 @@ const V_PATH = curve(V_PTS, true);
     <p class="bubble" data-bubble aria-live="polite">¡Hola! Soy Lunita. Te muestro el colegio</p>
     <Lunita size={120} pose="hola" poses={['hola', 'estudio', 'stheami', 'musica', 'espacio', 'admisiones', 'buscar', 'contacto', 'celebra']} track={false} class="guide-luni" label="Lunita, la guía de la página" />
   </aside>
+
+  <PromoModal />
 
   <!-- Barra fija de contacto en celular -->
   <nav class="mbar" aria-label="Contacto rápido">

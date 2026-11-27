@@ -182,3 +182,61 @@ if (reduce) $$<SVGSVGElement>('.route-svg').forEach((s) => s.pauseAnimations?.()
 /* ---------- Encabezado: sombra al hacer scroll ---------- */
 const top = $('[data-top]');
 addEventListener('scroll', () => top?.classList.toggle('scrolled', scrollY > 10), { passive: true });
+
+/* ---------- Ilustraciones y escenas: animan solo en pantalla ---------- */
+const liveIO = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('live', e.isIntersecting)), { rootMargin: '80px' });
+$$('[data-live]').forEach((el) => liveIO.observe(el));
+
+/* ---------- Cuenta regresiva de Matrículas 2027 ---------- */
+const cds = $$('[data-countdown]');
+if (cds.length) {
+  const opens = Date.parse(cds[0].dataset.opens!), closes = Date.parse(cds[0].dataset.closes!);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const tick = () => {
+    const now = Date.now();
+    const target = now < opens ? opens : now < closes ? closes : 0;
+    const label = now < opens ? 'Las matrículas 2027 abren en' : now < closes ? '¡Matrículas abiertas! Cierran en' : 'Matrículas 2027: escríbenos y te contamos los cupos disponibles';
+    const left = Math.max(0, target - now);
+    const v = { d: Math.floor(left / 864e5), h: Math.floor(left / 36e5) % 24, m: Math.floor(left / 6e4) % 60, s: Math.floor(left / 1e3) % 60 };
+    for (const cd of cds) {
+      const l = $('[data-cd-label]', cd); if (l && l.textContent !== label) l.textContent = label;
+      const tiles = $('[data-cd-tiles]', cd); if (tiles) tiles.hidden = !target;
+      $$('[data-u]', cd).forEach((b) => { const t = b.dataset.u === 'd' ? String(v.d) : pad(v[b.dataset.u as 'h' | 'm' | 's']); if (b.textContent !== t) b.textContent = t; });
+    }
+  };
+  tick(); setInterval(tick, 1000);
+}
+
+/* ---------- Pop-up de matrículas (una vez cada 3 días, nunca al cargar) ---------- */
+const promo = $<HTMLDialogElement>('[data-promo]');
+if (promo && typeof promo.showModal === 'function') {
+  const KEY = 'lunita-promo-v1';
+  const seenRecently = () => { try { return Date.now() - Number(localStorage.getItem(KEY) || 0) < 3 * 864e5; } catch { return false; } };
+  let armed = !seenRecently();
+  let converted = false;
+  const t0 = performance.now();
+  const formSection = $('#contacto');
+  const formVisible = () => { const r = formSection?.getBoundingClientRect(); return !!r && r.top < innerHeight && r.bottom > 0; };
+  const open = (reason: string) => {
+    if (!armed || converted || document.querySelector('dialog[open]') || formVisible()) return;
+    armed = false;
+    try { localStorage.setItem(KEY, String(Date.now())); } catch { /* sin almacenamiento */ }
+    promo.showModal();
+    track('popup', { reason });
+    setTimeout(() => lunApi($('.lunita', promo))?.tap(), 450);
+  };
+  const close = () => promo.close();
+  $$('[data-promo-close]', promo).forEach((b) => b.addEventListener('click', close));
+  promo.addEventListener('click', (e) => { if (e.target === promo) close(); });
+  document.addEventListener('click', (e) => { const t = e.target as Element; if (t.closest('[data-track]') && !t.closest('[data-promo]')) converted = true; }, true);
+  setTimeout(() => open('tiempo'), 22000);
+  addEventListener('scroll', () => {
+    const p = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    if (p > 0.5 && performance.now() - t0 > 8000) open('scroll');
+  }, { passive: true });
+  if (matchMedia('(pointer: fine)').matches) {
+    document.addEventListener('mouseout', (e) => { if (!e.relatedTarget && e.clientY <= 0 && performance.now() - t0 > 8000) open('salida'); });
+  }
+  // Para revisar: ?popup en la URL lo abre de inmediato
+  if (new URLSearchParams(location.search).has('popup')) { armed = true; setTimeout(() => open('prueba'), 300); }
+}

@@ -1,0 +1,77 @@
+---
+/**
+ * Cuenta regresiva de Matrículas 2027 (abre el 1 y cierra el 17 de diciembre de 2026).
+ * El texto inicial funciona sin JavaScript; landing.ts actualiza los números y el estado (abren / cierran / cerradas).
+ */
+import Icon from './Icon.astro';
+import { ENROLLMENT, waLink } from '@/data/site';
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const UNITS = [['d', 'días'], ['h', 'horas'], ['m', 'min'], ['s', 'seg']];
+---
+
+{compact ? (
+  <div class="cd cd-compact" data-countdown data-opens={ENROLLMENT.opens} data-closes={ENROLLMENT.closes}>
+    <p class="cd-label" data-cd-label>Matrículas 2027: del {ENROLLMENT.dates}</p>
+    <div class="cd-tiles" data-cd-tiles hidden>
+      {UNITS.map(([u, l]) => <span class="cd-tile"><b data-u={u}>00</b><small>{l}</small></span>)}
+    </div>
+  </div>
+) : (
+  <section class="urgency" aria-label="Fechas de Matrículas 2027">
+    <div class="wrap">
+      <div class="urg-card" data-countdown data-opens={ENROLLMENT.opens} data-closes={ENROLLMENT.closes} data-reveal="pop">
+        <svg class="urg-cal" viewBox="0 0 96 96" aria-hidden="true">
+          <rect x="10" y="20" width="76" height="68" rx="14" fill="#22246f" transform="translate(0 5)" />
+          <rect x="10" y="20" width="76" height="68" rx="14" fill="#fff" />
+          <path d="M10 34a14 14 0 0 1 14-14h48a14 14 0 0 1 14 14v8H10z" fill="#303296" />
+          <rect x="26" y="10" width="9" height="20" rx="4.5" fill="#0f1747" /><rect x="61" y="10" width="9" height="20" rx="4.5" fill="#0f1747" />
+          <text x="48" y="76" text-anchor="middle" class="urg-day">1</text>
+          <g class="urg-flip"><path d="M10 42h76v18H10z" fill="#ffc800" /><text x="48" y="56" text-anchor="middle" class="urg-mon">DIC</text></g>
+        </svg>
+        <div class="urg-text">
+          <p class="urg-k" data-cd-label>Matrículas 2027</p>
+          <p class="urg-d">Del <strong>1 al 17 de diciembre</strong> de 2026 · en línea por SIGA</p>
+        </div>
+        <div class="cd-tiles" data-cd-tiles hidden>
+          {UNITS.map(([u, l]) => <span class="cd-tile"><b data-u={u}>00</b><small>{l}</small></span>)}
+        </div>
+        <a class="btn navy" href={waLink('Hola, quiero reservar una asesoría para Matrículas 2027 en el Liceo Lunita de Chía.')} target="_blank" rel="noopener" data-track="whatsapp" data-where="cuenta-regresiva"><Icon name="whatsapp" /> Reservar asesoría</a>
+      </div>
+    </div>
+  </section>
+)}
+
+<style is:global>
+  .urgency { position: relative; z-index: 3; margin-top: clamp(-56px, -5vw, -28px); padding-bottom: 0.5rem; background: linear-gradient(var(--ivory, #fbf6ec) 50%, transparent 50%); }
+  .urg-card { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: clamp(0.8rem, 2vw, 1.6rem); padding: clamp(0.9rem, 2vw, 1.2rem) clamp(1rem, 2.4vw, 1.6rem);
+    border-radius: 30px; background: var(--yellow); box-shadow: 0 7px 0 var(--yellow-d), 0 24px 50px -24px rgb(15 23 71 / 0.4); color: var(--navy); }
+  .urg-cal { width: 70px; height: 70px; }
+  .urg-day { font-family: var(--font); font-weight: 900; font-size: 30px; fill: #0f1747; }
+  .urg-mon { font-family: var(--font); font-weight: 900; font-size: 13px; letter-spacing: 0.1em; fill: #0f1747; }
+  .urg-flip { transform-box: fill-box; transform-origin: top; }
+  @media (prefers-reduced-motion: no-preference) { .urg-card.is-in .urg-flip { animation: urg-flip 4s ease-in-out infinite; } }
+  @keyframes urg-flip { 0%, 80%, 100% { transform: none; } 88% { transform: scaleY(-0.2); } }
+  .urg-k { margin: 0; font-weight: 900; font-size: clamp(1.05rem, 0.9rem + 0.6vw, 1.4rem); letter-spacing: -0.02em; line-height: 1.15; }
+  .urg-d { margin: 0.2rem 0 0; font-weight: 700; font-size: 0.95rem; color: rgb(15 23 71 / 0.82); }
+  .urg-d strong { color: var(--navy); }
+  .cd-tiles { display: flex; gap: 0.45rem; }
+  .cd-tiles[hidden] { display: none; }
+  .cd-tile { display: grid; justify-items: center; min-width: 58px; padding: 0.4rem 0.3rem 0.35rem; border-radius: 16px; background: #fff; box-shadow: 0 4px 0 var(--yellow-d); }
+  .cd-tile b { font-size: 1.6rem; font-weight: 900; line-height: 1; color: var(--navy); font-variant-numeric: tabular-nums; }
+  .cd-tile small { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .urg-card .btn.navy { --c: var(--navy); --cd: #000; --fg: #fff; }
+  @media (max-width: 899px) {
+    .urg-card { grid-template-columns: auto 1fr; }
+    .cd-tiles, .urg-card .btn { grid-column: 1 / -1; }
+    .cd-tiles { justify-content: space-between; }
+    .cd-tile { flex: 1; }
+    .urg-card .btn { width: 100%; }
+    .urg-cal { width: 58px; height: 58px; }
+  }
+  /* Versión compacta (pop-up) */
+  .cd-compact { display: grid; gap: 0.5rem; justify-items: center; }
+  .cd-compact .cd-label { margin: 0; font-weight: 900; color: var(--navy); font-size: 0.95rem; }
+  .cd-compact .cd-tile { min-width: 54px; background: var(--yellow-l); box-shadow: 0 4px 0 #f0d66a; }
+  .cd-compact .cd-tile b { font-size: 1.35rem; }
+</style>

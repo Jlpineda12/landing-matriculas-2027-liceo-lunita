@@ -1,0 +1,81 @@
+---
+/**
+ * Pop-up de Matrículas 2027. Reglas (para no molestar ni afectar el SEO):
+ * - Nunca al cargar: aparece a los 22 s, al pasar la mitad de la página o al intentar salir (escritorio, tras 8 s).
+ * - Una sola vez cada 3 días, y nunca si la familia ya hizo clic en WhatsApp, llamar o SIGA.
+ * - En celular es una hoja inferior pequeña; se cierra con la X, con "Ahora no", con Esc o tocando fuera.
+ * La lógica vive en src/scripts/landing.ts.
+ */
+import Lunita from './Lunita.astro';
+import Icon from './Icon.astro';
+import Countdown from './Countdown.astro';
+import { SITE, waLink } from '@/data/site';
+
+const OPTS = [
+  { t: 'Jardín', c: '#ff9600', d: '#e08600' },
+  { t: 'Transición', c: '#ffc800', d: '#e5a400' },
+  { t: 'Primaria', c: '#58cc02', d: '#46a302' },
+  { t: 'Bachillerato', c: '#1cb0f6', d: '#1899d6' },
+];
+---
+
+<dialog class="promo" data-promo aria-labelledby="promo-title" aria-describedby="promo-desc">
+  <button class="promo-x" type="button" data-promo-close aria-label="Cerrar"><Icon name="close" /></button>
+  <div class="promo-top">
+    <span class="promo-burst" aria-hidden="true"></span>
+    <Lunita size={130} pose="admisiones" track={false} class="promo-luni" label="Lunita da la bienvenida a las familias nuevas" />
+  </div>
+  <div class="promo-body">
+    <p class="promo-k">Familias nuevas · Matrículas 2027</p>
+    <h2 id="promo-title">¿Para qué nivel buscas colegio?</h2>
+    <p id="promo-desc" class="promo-p">Elige uno y se abre WhatsApp con tu mensaje listo. Te contamos valores, requisitos y fechas.</p>
+    <div class="promo-opts">
+      {OPTS.map((o) => (
+        <a class="popt" style={`--c:${o.c};--cd:${o.d}`} href={waLink(`Hola, vi la página de Matrículas 2027 y quiero información para ${o.t} en el Liceo Lunita de Chía.`)} target="_blank" rel="noopener" data-track="whatsapp" data-where={`popup-${o.t.toLowerCase()}`}>
+          {o.t}
+        </a>
+      ))}
+    </div>
+    <Countdown compact />
+    <div class="promo-foot">
+      <a href={`tel:${SITE.phone}`} data-track="call" data-where="popup"><Icon name="phone" /> Prefiero llamar</a>
+      <button type="button" data-promo-close>Ahora no</button>
+    </div>
+  </div>
+</dialog>
+
+<style is:global>
+  .promo { border: 0; padding: 0; width: min(100% - 24px, 480px); max-height: min(92vh, 720px); overflow: visible; border-radius: 34px; background: #fff; color: var(--ink-2);
+    box-shadow: 0 10px 0 rgb(15 23 71 / 0.12), 0 40px 80px -20px rgb(15 23 71 / 0.45); }
+  .promo::backdrop { background: rgb(15 23 71 / 0.45); backdrop-filter: blur(3px); }
+  .promo[open] { animation: promo-in 0.55s cubic-bezier(.34, 1.56, .64, 1); }
+  .promo[open]::backdrop { animation: promo-fade 0.3s ease; }
+  @keyframes promo-in { from { opacity: 0; transform: translateY(40px) scale(0.92); } }
+  @keyframes promo-fade { from { opacity: 0; } }
+  .promo-x { position: absolute; z-index: 3; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--bg-2); color: var(--navy); display: grid; place-items: center; }
+  .promo-x svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; }
+  .promo-top { position: relative; height: 92px; border-radius: 34px 34px 0 0; background: var(--sky-l);
+    background-image: radial-gradient(2px 2px at 18% 30%, #ffc800 50%, transparent 51%), radial-gradient(2px 2px at 80% 40%, #ce82ff 50%, transparent 51%), radial-gradient(1.6px 1.6px at 62% 20%, #1cb0f6 50%, transparent 51%); }
+  .promo-luni { position: absolute !important; left: 50%; bottom: -52px; translate: -50% 0; }
+  .promo-burst { position: absolute; left: 50%; bottom: -40px; width: 170px; height: 170px; translate: -50% 0; border-radius: 50%; background: radial-gradient(circle, rgb(255 200 0 / 0.45), transparent 66%); }
+  .promo-body { padding: 62px clamp(1.1rem, 4vw, 1.8rem) clamp(1.1rem, 4vw, 1.5rem); text-align: center; }
+  .promo-k { margin: 0 0 0.4rem; font-weight: 900; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); }
+  .promo h2 { margin: 0 0 0.5rem; font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); color: var(--navy); letter-spacing: -0.03em; line-height: 1.05; }
+  .promo-p { margin: 0 auto 1rem; max-width: 36ch; font-size: 0.98rem; line-height: 1.45; }
+  .promo-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.1rem; }
+  .popt { display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 18px; background: var(--c); color: #0f1747; box-shadow: 0 5px 0 var(--cd);
+    font-weight: 900; font-size: 1.05rem; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+  .popt:hover { transform: translateY(-2px); }
+  .popt:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--cd); }
+  .promo-foot { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; margin-top: 1rem; padding-top: 0.9rem; border-top: 2px dashed var(--line); }
+  .promo-foot a, .promo-foot button { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; padding: 0 0.6rem; border: 0; background: none; font-weight: 800; font-size: 0.92rem; color: var(--sky-ink); text-decoration: none; }
+  .promo-foot button { color: var(--muted); }
+  .promo-foot svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+  @media (max-width: 640px) {
+    .promo { margin: auto 0 0; width: 100%; max-width: none; border-radius: 30px 30px 0 0; max-height: 90vh; overflow-y: auto; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
+    .promo[open] { animation-name: sheet-in; }
+    .promo-top { border-radius: 30px 30px 0 0; height: 80px; }
+    @keyframes sheet-in { from { transform: translateY(100%); } }
+  }
+  @media (prefers-reduced-motion: reduce) { .promo[open], .promo[open]::backdrop { animation: none; } }
+</style>

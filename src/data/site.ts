@@ -25,7 +25,16 @@ export const ENROLLMENT = {
   dates: '1 al 17 de diciembre de 2026',
   hours: 'Jornada continua de 8:00 a. m. a 3:00 p. m.',
   classes: '6:45 a. m. a 3:00 p. m.',
+  /** Apertura y cierre (hora de Colombia, UTC-5) para la cuenta regresiva. */
+  opens: '2026-12-01T08:00:00-05:00',
+  closes: '2026-12-17T15:00:00-05:00',
 };
+
+/** Prensa (titulares reales enlazados desde el sitio institucional). */
+export const PRESS = [
+  { outlet: 'Semana', title: 'La mujer que llevó a sus estudiantes de Chía a la NASA', url: 'https://www.semana.com/mejor-colombia/articulo/la-mujer-que-llevo-a-sus-estudiantes-de-chia-a-la-nasa/202505/' },
+  { outlet: 'Cambio', title: '“Captura la imaginación de los jóvenes”: Michio Kaku elogió al Liceo Lunita de Chía', url: 'https://cambiocolombia.com/pais/captura-la-imaginacion-de-lo-jovenes-michio-kaku-elogio-al-liceo-lunita-de-chia' },
+];
 
 /** Mensaje prellenado de WhatsApp. */
 export const waLink = (text = 'Hola, quiero información sobre las Matrículas 2027 en el Liceo Lunita de Chía.') =>
@@ -114,8 +123,11 @@ export const FAQ = [
   { q: '¿Cuánto cuestan la matrícula y la pensión?', a: 'En 2026 la matrícula fue de $674.000 en preescolar, $714.000 en primaria y $756.000 en bachillerato; la pensión mensual, de $400.000 a $500.000 según el grado, y el formulario, de $110.000. Los valores de 2027 se confirman al momento de la matrícula.' },
   { q: '¿Cuál es el horario de clases?', a: 'La jornada de clases es de 6:45 a. m. a 3:00 p. m.' },
   { q: '¿Qué es el modelo STHEAMI?', a: 'Es nuestro modelo pedagógico propio: integra Ciencia, Tecnología, Humanidades, Ingeniería, Artes, Matemáticas e Inclusión en proyectos interdisciplinarios, junto con la heutagogía, en la que el estudiante gestiona su propio aprendizaje.' },
-  { q: '¿El colegio tiene convenios internacionales?', a: 'Sí. Tenemos convenio de bachillerato internacional con Florida Global University, además de intercambios culturales y viajes pedagógicos. Nuestras promociones han viajado a destinos como Canadá, Europa, Londres, China y Cuba.' },
+  { q: '¿El colegio tiene convenios internacionales?', a: 'Sí. Tenemos convenio de bachillerato internacional con Florida Global University, además de intercambios culturales y viajes pedagógicos. Cada promoción vive su propio viaje de promoción, a destinos como Canadá, Europa, Londres, China y Cuba.' },
   { q: '¿El colegio tiene banda marcial?', a: 'Sí. La Banda Marcial del Liceo Lunita de Chía participa en festivales nacionales e internacionales, y desde 2023 el colegio organiza el Festival Internacional de Bandas Marciales "Ciudad de la Luna".' },
   { q: '¿Cómo apoyan el bienestar de los estudiantes?', a: 'Con un equipo interdisciplinar de psicología, fonoaudiología, terapias de lenguaje, terapias físicas y acompañamiento a procesos de inclusión, además de rutas de atención para la convivencia escolar.' },
+  { q: '¿El colegio tiene piscina?', a: 'Sí. Contamos con piscina e instructores para que los niños aprendan a nadar con seguridad y confianza.' },
+  { q: '¿Cómo preparan a los estudiantes para el ICFES?', a: 'Somos un colegio de alta intensidad académica y nuestros estudiantes reciben entrenamiento PREICFES con Instruimos, junto con la Universidad Nacional.' },
+  { q: '¿Qué hacen en tecnología?', a: 'Desarrollamos proyectos de realidad virtual y tecnologías emergentes, robótica y programación, y hemos participado en el NASA Space Apps Challenge (Chía 2024 y Neiva 2025).' },
   { q: '¿Dónde queda el colegio?', a: 'Estamos en Chía, Cundinamarca. Escríbenos por WhatsApp y te enviamos la ubicación para que agendes tu visita.' },
 ];
