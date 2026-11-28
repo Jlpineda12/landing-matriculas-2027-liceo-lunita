@@ -1,0 +1,72 @@
+---
+/**
+ * Álbum de viajes de promoción: fotos reales del sitio del colegio, como polaroids con cinta.
+ * Escritorio: collage en 3 columnas. Celular y tablet: carrusel deslizable con imán.
+ * Los pies de foto salen de las noticias del colegio (no inventar fechas ni lugares).
+ */
+import { Image } from 'astro:assets';
+import europa24 from '@/assets/fotos/viaje-europa-2024.jpg';
+import europa15 from '@/assets/fotos/viaje-europa-2015.jpg';
+import cuba from '@/assets/fotos/viaje-cuba-2018.jpg';
+import canada from '@/assets/fotos/viaje-canada-2013.jpg';
+import china from '@/assets/fotos/viaje-china-2019.jpg';
+
+const PHOTOS = [
+  { src: europa24, place: 'París, Europa', note: 'Promoción 2024', alt: 'Estudiantes de la promoción 2024 del Liceo Lunita frente al letrero de París', tape: '#ffc800', pos: '50% 60%' },
+  { src: cuba, place: 'La Habana, Cuba', note: 'Promoción 2018', alt: 'Estudiantes de grado once del Liceo Lunita en su viaje a Cuba', tape: '#58cc02', pos: '50% 40%' },
+  { src: europa15, place: 'Roma, Europa', note: 'Promoción 2015 · más de 8 países', alt: 'Estudiantes de la promoción 2015 con trajes típicos colombianos en la plaza de San Pedro', tape: '#1cb0f6', pos: '50% 75%' },
+  { src: china, place: 'Rumbo a China', note: 'Promoción 2019', alt: 'Estudiantes de la promoción 2019 con trajes tradicionales chinos en la muestra «Prom 2019 China»', tape: '#ff9600', pos: '50% 55%' },
+  { src: canada, place: 'Canadá', note: 'Cultura muisca en colegios canadienses', alt: 'Estudiantes del Liceo Lunita con instrumentos y trajes típicos en Canadá', tape: '#ce82ff', pos: '50% 60%' },
+];
+---
+
+<div class="album" aria-label="Fotos de viajes de promoción">
+  <ul class="album-track">
+    {PHOTOS.map((p, i) => (
+      <li class="pol" style={`--r:${[-2.5, 2, -2, 2.5, -1.5][i]}deg;--tape:${p.tape};--d:${i}`} data-reveal="pop">
+        <figure>
+          <span class="tape" aria-hidden="true"></span>
+          <div class="pol-img">
+            <Image src={p.src} alt={p.alt} widths={[320, 480, 640]} sizes="(min-width: 1000px) 560px, (min-width: 640px) 44vw, 78vw" loading="lazy" style={`object-position:${p.pos}`} />
+          </div>
+          <figcaption><b>{p.place}</b><span>{p.note}</span></figcaption>
+        </figure>
+      </li>
+    ))}
+  </ul>
+  <p class="album-hint" aria-hidden="true">Desliza para ver más viajes →</p>
+</div>
+
+<style>
+  .album { margin-top: clamp(1.6rem, 4vw, 2.6rem); }
+  .album-track { list-style: none; margin: 0; padding: 0; display: grid; gap: clamp(1.2rem, 2.6vw, 2rem); grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .pol { grid-column: span 2; position: relative; }
+  .pol:nth-child(-n+2) { grid-column: span 3; }
+  .pol:nth-child(-n+2) .pol-img { aspect-ratio: 16 / 10; }
+  .pol figure { rotate: var(--r); transition: rotate 0.35s var(--spring, cubic-bezier(.34, 1.56, .64, 1)), translate 0.35s var(--spring, cubic-bezier(.34, 1.56, .64, 1)); }
+  .pol:hover { z-index: 2; }
+  .pol:hover figure { rotate: 0deg; translate: 0 -6px; }
+  .pol figure { position: relative; margin: 0; padding: 12px 12px 0; border-radius: 10px; background: #fff;
+    box-shadow: 0 2px 0 rgb(15 23 71 / 0.06), 0 18px 34px -16px rgb(15 23 71 / 0.38); }
+  .tape { position: absolute; z-index: 1; top: -12px; left: 50%; width: 92px; height: 26px; translate: -50% 0; rotate: calc(var(--r) * -1.4);
+    background: color-mix(in srgb, var(--tape) 78%, #fff); opacity: 0.92; border-radius: 3px;
+    mask: linear-gradient(90deg, transparent 0 3px, #000 3px calc(100% - 3px), transparent calc(100% - 3px)); }
+  .pol-img { aspect-ratio: 4 / 3; border-radius: 4px; overflow: hidden; background: var(--bg-2, #eef3f7); }
+  .pol-img :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
+  .pol:hover .pol-img :global(img) { transform: scale(1.05); }
+  .pol figcaption { display: grid; gap: 0.1rem; padding: 0.7rem 0.3rem 0.85rem; text-align: center; }
+  .pol figcaption b { font-weight: 900; font-size: 1.08rem; color: var(--navy); letter-spacing: -0.01em; }
+  .pol figcaption span { font-weight: 700; font-size: 0.86rem; color: var(--muted); }
+  .album-hint { display: none; }
+
+  @media (max-width: 999px) {
+    .album-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 1.2rem; gap: 1.1rem;
+      margin-inline: calc(var(--gutter, 1.2rem) * -1); padding: 1.4rem var(--gutter, 1.2rem) 1.6rem; scrollbar-width: none; }
+    .album-track::-webkit-scrollbar { display: none; }
+    .pol, .pol:nth-child(-n+2) { flex: 0 0 min(78vw, 340px); scroll-snap-align: center; }
+    .pol:nth-child(-n+2) .pol-img { aspect-ratio: 4 / 3; }
+    .album-hint { display: block; margin: 0; text-align: center; font-weight: 800; font-size: 0.85rem; color: var(--sky-ink, #066fa1); }
+  }
+  @media (min-width: 640px) and (max-width: 999px) { .pol, .pol:nth-child(-n+2) { flex-basis: 44vw; } }
+  @media (prefers-reduced-motion: reduce) { .pol figure { transition: none; } .pol-img :global(img) { transition: none; } }
+</style>
