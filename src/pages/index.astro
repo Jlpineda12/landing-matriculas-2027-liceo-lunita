@@ -9,7 +9,6 @@ import Base from '@/layouts/Base.astro';
 import Lunita from '@/components/Lunita.astro';
 import Icon from '@/components/Icon.astro';
 import Sticker from '@/components/Sticker.astro';
-import Illus from '@/components/Illus.astro';
 import Balance from '@/components/Balance.astro';
 import Countdown from '@/components/Countdown.astro';
 import PromoModal from '@/components/PromoModal.astro';
@@ -22,7 +21,9 @@ import bachillerato from '@/assets/bachillerato.jpg';
 import festival from '@/assets/festival-bandas.webp';
 import convenio from '@/assets/convenio-florida.jpeg';
 import premio from '@/assets/premio-excelencia.webp';
-import robotica from '@/assets/fotos/robotica-stheami-2026.webp';
+import realidadVirtual from '@/assets/fotos/realidad-virtual.jpg';
+import piscina from '@/assets/fotos/piscina-instructor.jpg';
+import preicfes from '@/assets/fotos/preicfes-sala.jpg';
 import cohetes from '@/assets/fotos/cohetes-apolo-50.jpg';
 import kaku from '@/assets/fotos/michio-kaku.jpg';
 import sede from '@/assets/fotos/sede-aerea.jpg';
@@ -257,7 +258,7 @@ const V_PATH = curve(V_PTS, true);
           </article>
 
           <article class="card b-ill s3 t-purple" data-guide="espacio|¡Tecnología del futuro, hoy!">
-            <div class="ph-box"><Image src={robotica} alt="Estudiantes construyendo y programando robots en la Semana STHEAMI 2026" widths={[360, 540, 720]} sizes="(min-width: 1000px) 560px, (min-width: 640px) 46vw, 90vw" loading="lazy" style="object-position:40% 62%" /><span class="ph-tag"><Icon name="sparkle" /> Semana STHEAMI 2026</span></div>
+            <div class="ph-box"><Image src={realidadVirtual} alt="Estudiante con un visor de realidad virtual en el laboratorio de tecnología del colegio" widths={[360, 540, 720, 1080]} sizes="(min-width: 1000px) 560px, (min-width: 640px) 46vw, 90vw" loading="lazy" style="object-position:30% 45%" /><span class="ph-tag"><Icon name="sparkle" /> Laboratorio de tecnología</span></div>
             <span class="chip">Tecnología</span>
             <h3>Realidad virtual y tecnologías emergentes</h3>
             <p class="muted">Proyectos con realidad virtual, robótica y programación para que creen con la tecnología, no solo la usen.</p>
@@ -271,14 +272,14 @@ const V_PATH = curve(V_PTS, true);
           </article>
 
           <article class="card b-ill s2 t-sky" data-guide="hola|¡A nadar con instructores!">
-            <div class="ill-box"><Illus kind="pool" label="Piscina con un flotador y olas" /></div>
+            <div class="ph-box"><Image src={piscina} alt="Instructor en la piscina del colegio con un grupo de niños aprendiendo a nadar" widths={[360, 540, 720]} sizes="(min-width: 1000px) 370px, (min-width: 640px) 46vw, 90vw" loading="lazy" style="object-position:50% 55%" /><span class="ph-tag"><Icon name="heart" /> Nuestra piscina</span></div>
             <span class="chip">Deporte</span>
             <h3>Piscina con instructores</h3>
             <p class="muted">Los niños aprenden a nadar con instructores, con seguridad y confianza.</p>
           </article>
 
           <article class="card b-ill s2 t-green" data-guide="estudio|¡Listos para el ICFES!">
-            <div class="ill-box"><Illus kind="preicfes" label="Hoja de respuestas y gráfica de resultados en ascenso" /></div>
+            <div class="ph-box"><Image src={preicfes} alt="Estudiantes de bachillerato practicando en la sala de computadores durante el PREICFES" widths={[360, 540, 720]} sizes="(min-width: 1000px) 370px, (min-width: 640px) 46vw, 90vw" loading="lazy" style="object-position:50% 60%" /><span class="ph-tag"><Icon name="book" /> Preparación Saber 11</span></div>
             <span class="chip">Bachillerato</span>
             <h3>PREICFES con Instruimos</h3>
             <p class="muted">Entrenamiento para las pruebas Saber 11 con Instruimos, junto con la Universidad Nacional.</p>
